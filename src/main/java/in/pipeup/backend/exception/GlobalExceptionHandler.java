@@ -43,8 +43,63 @@ public class GlobalExceptionHandler {
                 ex.getMessage(),
                 LocalDateTime.now()
         );
-
         return new ResponseEntity<>(response, HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
+    @ExceptionHandler(UserNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleUserNotFoundException(UserNotFoundException ex) {
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                false,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+
+
+    @ExceptionHandler(InvalidPasswordException.class)
+    public ResponseEntity<ApiErrorResponse> handleInvalidPasswordException(InvalidPasswordException ex) {
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                false,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.BAD_REQUEST);
+    }
+
+
+    @ExceptionHandler(CreatorProfileAlreadyExistsException.class)
+    public ResponseEntity<ApiErrorResponse> handleCreatorProfileAlreadyExists(
+            CreatorProfileAlreadyExistsException ex) {
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                false,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.CONFLICT);
+    }
+
+
+    @ExceptionHandler(CreatorProfileNotFoundException.class)
+    public ResponseEntity<ApiErrorResponse> handleCreatorProfileNotFound(
+            CreatorProfileNotFoundException ex) {
+
+        ApiErrorResponse response = new ApiErrorResponse(
+                false,
+                ex.getMessage(),
+                LocalDateTime.now()
+        );
+
+        return new ResponseEntity<>(response, HttpStatus.NOT_FOUND);
+    }
+
+
+
 
 }
