@@ -1,6 +1,6 @@
 package in.pipeup.backend.creator.mapper;
 
-import in.pipeup.backend.creator.dto.request.CreateCreatorProfileRequest;
+import in.pipeup.backend.creator.dto.request.CompleteCreatorOnboardingRequest;
 import in.pipeup.backend.creator.dto.request.UpdateCreatorProfileRequest;
 import in.pipeup.backend.creator.dto.response.CreatorProfileResponse;
 import in.pipeup.backend.entity.CreatorProfile;
@@ -9,8 +9,9 @@ import org.springframework.stereotype.Component;
 @Component
 public class CreatorProfileMapper {
 
-
-    //Convert Entity -> Response DTO
+    /*
+     * Entity -> Response
+     */
     public CreatorProfileResponse toResponse(CreatorProfile creatorProfile) {
 
         if (creatorProfile == null) {
@@ -18,99 +19,175 @@ public class CreatorProfileMapper {
         }
 
         CreatorProfileResponse response = new CreatorProfileResponse();
+
         response.setId(creatorProfile.getId());
+
         response.setDisplayName(creatorProfile.getDisplayName());
-        response.setBio(creatorProfile.getBio());
-        response.setCity(creatorProfile.getCity());
-        response.setState(creatorProfile.getState());
-        response.setCountry(creatorProfile.getCountry());
-        response.setContentLanguages(creatorProfile.getContentLanguages());
-        response.setNiches(creatorProfile.getNiches());
-        response.setCustomNiche(creatorProfile.getCustomNiche());
+
+        response.setEmail(creatorProfile.getUser().getEmail());
+
+        response.setPhoneNumber(creatorProfile.getPhoneNumber());
+
         response.setYoutubeChannelUrl(creatorProfile.getYoutubeChannelUrl());
+
         response.setInstagramProfileUrl(creatorProfile.getInstagramProfileUrl());
+
+        response.setNiches(creatorProfile.getNiches());
+
+        response.setState(creatorProfile.getState());
+
+        response.setCity(creatorProfile.getCity());
+
+        response.setCurrentChallenge(creatorProfile.getCurrentChallenge());
+
+        response.setExpectedSupport(creatorProfile.getExpectedSupport());
+
+        response.setStartingPrice(creatorProfile.getStartingPrice());
+
         response.setProfileImageUrl(creatorProfile.getProfileImageUrl());
-        response.setProfileCompleted(creatorProfile.getProfileCompleted());
+
+        response.setOnboardingCompleted(creatorProfile.getOnboardingCompleted());
+
+        response.setOnboardingCompletedAt(
+                creatorProfile.getOnboardingCompletedAt()
+        );
+
+        response.setCreatedAt(
+                creatorProfile.getCreatedAt()
+        );
+
+        response.setUpdatedAt(
+                creatorProfile.getUpdatedAt()
+        );
 
         return response;
     }
 
-
-    //Convert Create Request DTO -> Entity
-    public CreatorProfile toEntity(CreateCreatorProfileRequest request) {
+    /*
+     * Onboarding Request -> Entity
+     */
+    public CreatorProfile toEntity(CompleteCreatorOnboardingRequest request) {
 
         if (request == null) {
             return null;
         }
 
         CreatorProfile creatorProfile = new CreatorProfile();
-        creatorProfile.setDisplayName(request.getDisplayName());
-        creatorProfile.setBio(request.getBio());
-        creatorProfile.setCity(request.getCity());
-        creatorProfile.setState(request.getState());
-        creatorProfile.setCountry(request.getCountry());
-        creatorProfile.setContentLanguages(request.getContentLanguages());
-        creatorProfile.setNiches(request.getNiches());
-        creatorProfile.setCustomNiche(request.getCustomNiche());
+
+        creatorProfile.setDisplayName(request.getDisplayName().trim());
+
+        creatorProfile.setPhoneNumber(request.getPhoneNumber().trim());
+
         creatorProfile.setYoutubeChannelUrl(request.getYoutubeChannelUrl());
+
         creatorProfile.setInstagramProfileUrl(request.getInstagramProfileUrl());
+
+        creatorProfile.setNiches(request.getNiches());
+
+        creatorProfile.setState(request.getState().trim());
+
+        creatorProfile.setCity(request.getCity().trim());
+
+        creatorProfile.setCurrentChallenge(request.getCurrentChallenge());
+
+        creatorProfile.setExpectedSupport(request.getExpectedSupport());
+
+        creatorProfile.setStartingPrice(request.getStartingPrice());
 
         return creatorProfile;
     }
 
+    /*
+     * Update Existing Entity
+     */
+    public void updateEntity(
+            CreatorProfile creatorProfile,
+            UpdateCreatorProfileRequest request
+    ) {
 
+        if (request.getDisplayName() != null &&
+                !request.getDisplayName().isBlank()) {
 
+            creatorProfile.setDisplayName(
+                    request.getDisplayName().trim()
+            );
+        }
 
-   // Update Existing Entity from Update DTO
-   public void updateEntity(CreatorProfile creatorProfile,
-                            UpdateCreatorProfileRequest request) {
+        if (request.getPhoneNumber() != null &&
+                !request.getPhoneNumber().isBlank()) {
 
-       if (request.getDisplayName() != null && !request.getDisplayName().isBlank()) {
-           creatorProfile.setDisplayName(request.getDisplayName().trim());
-       }
+            creatorProfile.setPhoneNumber(
+                    request.getPhoneNumber().trim()
+            );
+        }
 
-       if (request.getBio() != null && !request.getBio().isBlank()) {
-           creatorProfile.setBio(request.getBio().trim());
-       }
+        if (request.getYoutubeChannelUrl() != null &&
+                !request.getYoutubeChannelUrl().isBlank()) {
 
-       if (request.getCity() != null && !request.getCity().isBlank()) {
-           creatorProfile.setCity(request.getCity().trim());
-       }
+            creatorProfile.setYoutubeChannelUrl(
+                    request.getYoutubeChannelUrl().trim()
+            );
+        }
 
-       if (request.getState() != null && !request.getState().isBlank()) {
-           creatorProfile.setState(request.getState().trim());
-       }
+        if (request.getInstagramProfileUrl() != null &&
+                !request.getInstagramProfileUrl().isBlank()) {
 
-       if (request.getCountry() != null && !request.getCountry().isBlank()) {
-           creatorProfile.setCountry(request.getCountry().trim());
-       }
+            creatorProfile.setInstagramProfileUrl(
+                    request.getInstagramProfileUrl().trim()
+            );
+        }
 
-       if (request.getContentLanguages() != null
-               && !request.getContentLanguages().isEmpty()) {
-           creatorProfile.setContentLanguages(request.getContentLanguages());
-       }
+        if (request.getNiches() != null &&
+                !request.getNiches().isEmpty()) {
 
-       if (request.getNiches() != null
-               && !request.getNiches().isEmpty()) {
-           creatorProfile.setNiches(request.getNiches());
-       }
+            creatorProfile.setNiches(request.getNiches());
+        }
 
-       if (request.getCustomNiche() != null
-               && !request.getCustomNiche().isBlank()) {
-           creatorProfile.setCustomNiche(request.getCustomNiche().trim());
-       }
+        if (request.getState() != null &&
+                !request.getState().isBlank()) {
 
-       if (request.getYoutubeChannelUrl() != null
-               && !request.getYoutubeChannelUrl().isBlank()) {
-           creatorProfile.setYoutubeChannelUrl(request.getYoutubeChannelUrl().trim());
-       }
+            creatorProfile.setState(
+                    request.getState().trim()
+            );
+        }
 
-       if (request.getInstagramProfileUrl() != null
-               && !request.getInstagramProfileUrl().isBlank()) {
-           creatorProfile.setInstagramProfileUrl(request.getInstagramProfileUrl().trim());
-       }
-   }
+        if (request.getCity() != null &&
+                !request.getCity().isBlank()) {
 
+            creatorProfile.setCity(
+                    request.getCity().trim()
+            );
+        }
+
+        if (request.getCurrentChallenge() != null &&
+                !request.getCurrentChallenge().isBlank()) {
+
+            creatorProfile.setCurrentChallenge(
+                    request.getCurrentChallenge().trim()
+            );
+        }
+
+        if (request.getExpectedSupport() != null &&
+                !request.getExpectedSupport().isBlank()) {
+
+            creatorProfile.setExpectedSupport(
+                    request.getExpectedSupport().trim()
+            );
+        }
+
+        if (request.getStartingPrice() != null) {
+
+            creatorProfile.setStartingPrice(
+                    request.getStartingPrice()
+            );
+        }
+
+        if (request.getProfileImageUrl() != null &&
+                !request.getProfileImageUrl().isBlank()) {
+
+            creatorProfile.setProfileImageUrl(
+                    request.getProfileImageUrl().trim()
+            );
+        }
+    }
 }
-
-

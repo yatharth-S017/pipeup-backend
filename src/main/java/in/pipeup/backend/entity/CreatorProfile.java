@@ -1,77 +1,91 @@
 package in.pipeup.backend.entity;
 
-
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.Getter;
+import lombok.Setter;
 
+import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.HashSet;
 import java.util.Set;
 
-@Entity
-@Table(name = "creator_profiles")
 @Getter
 @Setter
-@NoArgsConstructor
-@AllArgsConstructor
-@Builder
+@Entity
+@Table(name = "creator_profiles")
 public class CreatorProfile {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    // Public name shown to brands
-    @Column(nullable = false)
-    private String displayName;
 
-    @Column(length = 1000)
-    private String bio;
-
-    private String city;
-    private String state;
-    private String country;
-
-    /**
-     * Languages in which creator creates content.
-     * Example: English, Hindi
-     */
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "creator_languages", joinColumns = @JoinColumn(name = "creator_profile_id"))
-    @Column(name = "language")
-    @Builder.Default
-    private Set<String> contentLanguages = new HashSet<>();
-
-
-    /**
-     * Multiple creator niches.
-     * Example:
-     * TECH
-     * AI
-     * EDUCATION
-     */
-    @ElementCollection(fetch = FetchType.EAGER)
-    @CollectionTable(name = "creator_niches", joinColumns = @JoinColumn(name = "creator_profile_id"))
-    @Enumerated(EnumType.STRING)
-    @Column(name = "niche")
-    @Builder.Default
-    private Set<Niche> niches = new HashSet<>();
-
-    /**
-     * Used only when niche contains OTHER.
-     */
-    private String customNiche;
-
-    private String youtubeChannelUrl;
-    private String instagramProfileUrl;
-
-
-     // URL returned from Cloudinary (or any storage provider).
-    private String profileImageUrl;
-
-    @Builder.Default
-    private Boolean profileCompleted = false;
-
+     // One User -> One Creator Profile
     @OneToOne(fetch = FetchType.LAZY)
     @JoinColumn(name = "user_id", nullable = false, unique = true)
     private User user;
+
+    //Creator Identity
+    @Column(nullable = false)
+    private String displayName;
+
+
+    @Column(nullable = false, length = 15)
+    private String phoneNumber;
+
+
+    //Social Links
+    private String youtubeChannelUrl;
+    private String instagramProfileUrl;
+
+    private String state;
+    private String city;
+
+
+    //Creator Category
+    @ElementCollection(fetch = FetchType.EAGER)
+    @CollectionTable(name = "creator_niches", joinColumns = @JoinColumn(name = "creator_profile_id"))
+    @Column(name = "niche")
+    private Set<String> niches = new HashSet<>();
+
+
+    //Creator Journey
+    @Column(length = 500)
+    private String currentChallenge;
+
+    @Column(length = 500)
+    private String expectedSupport;
+
+
+    //Pricing
+    @Column(precision = 10, scale = 2)
+    private BigDecimal startingPrice;
+
+
+    //Profile
+    private String profileImageUrl;
+
+
+    //Onboarding
+    @Column(nullable = false)
+    private Boolean onboardingCompleted = false;
+
+    private LocalDateTime onboardingCompletedAt;
+
+    //Audit
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+    private LocalDateTime updatedAt;
+
+
+    @PrePersist
+    public void onCreate() {
+        createdAt = LocalDateTime.now();
+        updatedAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    public void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
 }
