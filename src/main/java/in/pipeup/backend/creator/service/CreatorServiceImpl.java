@@ -6,26 +6,28 @@ import in.pipeup.backend.creator.dto.request.UpdateCreatorProfileRequest;
 import in.pipeup.backend.creator.dto.response.CreatorProfileResponse;
 import in.pipeup.backend.creator.mapper.CreatorProfileMapper;
 import in.pipeup.backend.creator.repository.CreatorProfileRepository;
-import in.pipeup.backend.creator.service.ICreatorService;
-import in.pipeup.backend.entity.CreatorProfile;
-import in.pipeup.backend.entity.Role;
+import in.pipeup.backend.creator.entity.CreatorProfile;
 import in.pipeup.backend.entity.User;
 import in.pipeup.backend.exception.CreatorProfileAlreadyExistsException;
 import in.pipeup.backend.exception.CreatorProfileNotFoundException;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
+import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
 
 @Service
 @RequiredArgsConstructor
 @Transactional
+@Slf4j
 public class CreatorServiceImpl implements ICreatorService {
 
     private final CreatorProfileRepository creatorProfileRepository;
     private final CreatorProfileMapper creatorProfileMapper;
     private final CurrentUserService currentUserService;
+
+    private final ICreatorAnalyticsService creatorAnalyticsService;
 
 
     @Override
@@ -42,7 +44,18 @@ public class CreatorServiceImpl implements ICreatorService {
         creatorProfile.setUser(currentUser);
         creatorProfile.setOnboardingCompleted(true);
         creatorProfile.setOnboardingCompletedAt(LocalDateTime.now());
+
         CreatorProfile savedProfile = creatorProfileRepository.save(creatorProfile);
+
+
+        // Automatically initialize creator analytics
+        System.out.println("========== initializeAnalytics() Called ==========");
+//        try {
+//            creatorAnalyticsService.initializeAnalytics(savedProfile);
+//        } catch (Exception ex) {
+//            log.warn("Unable to initialize analytics for creator {}", savedProfile.getId(), ex);
+//        }
+        creatorAnalyticsService.initializeAnalytics(savedProfile);
 
         return creatorProfileMapper.toResponse(savedProfile);
     }

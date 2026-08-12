@@ -3,7 +3,7 @@ package in.pipeup.backend.creator.mapper;
 import in.pipeup.backend.creator.dto.request.CompleteCreatorOnboardingRequest;
 import in.pipeup.backend.creator.dto.request.UpdateCreatorProfileRequest;
 import in.pipeup.backend.creator.dto.response.CreatorProfileResponse;
-import in.pipeup.backend.entity.CreatorProfile;
+import in.pipeup.backend.creator.entity.CreatorProfile;
 import org.springframework.stereotype.Component;
 
 @Component

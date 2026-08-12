@@ -1,6 +1,6 @@
 package in.pipeup.backend.creator.repository;
 
-import in.pipeup.backend.entity.CreatorProfile;
+import in.pipeup.backend.creator.entity.CreatorProfile;
 import in.pipeup.backend.entity.User;
 import org.springframework.data.jpa.repository.JpaRepository;
 

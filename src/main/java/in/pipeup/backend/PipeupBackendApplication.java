@@ -7,6 +7,7 @@ import org.springframework.boot.autoconfigure.SpringBootApplication;
 public class PipeupBackendApplication {
 
 	public static void main(String[] args) {
+
 		SpringApplication.run(PipeupBackendApplication.class, args);
 	}
 

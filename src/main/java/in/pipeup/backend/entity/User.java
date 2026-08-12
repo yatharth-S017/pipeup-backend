@@ -22,5 +22,9 @@ public class User {
     @Enumerated(EnumType.STRING)
     private Role role;
 
+    @Enumerated(EnumType.STRING)
+    @Column(nullable = true)
+    private AccountType accountType;
+
 
 }

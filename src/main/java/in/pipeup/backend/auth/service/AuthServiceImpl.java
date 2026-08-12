@@ -51,14 +51,17 @@ public class AuthServiceImpl implements IAuthService{
         user.setEmail(request.getEmail());
         user.setPassword(passwordEncoder.encode(request.getPassword()));
         user.setRole(Role.USER);
+        user.setAccountType(request.getAccountType());
 
         User savedUser = userRepository.save(user);
+
 
         return new RegisterResponse(
                 savedUser.getId(),
                 savedUser.getFullName(),
                 savedUser.getEmail(),
-                savedUser.getRole().name()
+                savedUser.getRole().name(),
+                savedUser.getAccountType().name()
         );
     }
 
@@ -80,7 +83,8 @@ public class AuthServiceImpl implements IAuthService{
                 token,
                 user.getFullName(),
                 user.getEmail(),
-                user.getRole().name()
+                user.getRole().name(),
+                user.getAccountType().name()
         );
     }
 

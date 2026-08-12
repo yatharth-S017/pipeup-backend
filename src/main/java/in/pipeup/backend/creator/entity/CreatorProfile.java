@@ -1,5 +1,6 @@
-package in.pipeup.backend.entity;
+package in.pipeup.backend.creator.entity;
 
+import in.pipeup.backend.entity.User;
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
