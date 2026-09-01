@@ -22,4 +22,7 @@ public interface IApplicationService {
     void acceptApplication(Long applicationId);
 
     void rejectApplication(Long applicationId);
+
+
+    void submitApplication(Long applicationId, SubmissionRequest request);
 }

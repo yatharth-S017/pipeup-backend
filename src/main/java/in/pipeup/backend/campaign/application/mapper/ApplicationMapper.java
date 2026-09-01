@@ -52,6 +52,8 @@ public class ApplicationMapper {
                 .totalViews(analytics.getTotalViews())
                 .status(application.getStatus())
                 .appliedAt(application.getAppliedAt())
+                .submissionUrl(application.getSubmissionUrl())
+                .submittedAt(application.getSubmittedAt())
                 .build();
     }
 
@@ -70,6 +72,8 @@ public class ApplicationMapper {
                 .message(application.getMessage())
                 .status(application.getStatus())
                 .appliedAt(application.getAppliedAt())
+                .submissionUrl(application.getSubmissionUrl())
+                .submittedAt(application.getSubmittedAt())
                 .build();
     }
 

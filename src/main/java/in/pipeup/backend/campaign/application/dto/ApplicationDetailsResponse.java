@@ -31,4 +31,8 @@ public class ApplicationDetailsResponse {
     private ApplicationStatus status;
 
     private LocalDateTime appliedAt;
+
+
+    private String submissionUrl;
+    private LocalDateTime submittedAt;
 }

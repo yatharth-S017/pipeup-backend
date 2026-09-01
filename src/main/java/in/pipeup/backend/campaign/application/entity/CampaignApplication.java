@@ -58,4 +58,13 @@ public class CampaignApplication {
 
     @UpdateTimestamp
     private LocalDateTime updatedAt;
+
+
+    // Creator's submitted video/content URL
+    @Column(length = 1000)
+    private String submissionUrl;
+
+    // Time when creator submitted the content
+    private LocalDateTime submittedAt;
+
 }

@@ -25,6 +25,7 @@ import in.pipeup.backend.exception.CreatorProfileNotFoundException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 
 @Service
@@ -223,6 +224,53 @@ public class ApplicationServiceImpl implements IApplicationService{
         }
     }
 
+
+
+
+
+
+    @Override
+    public void submitApplication(Long applicationId, SubmissionRequest request) {
+
+        // Get currently logged-in creator
+        User currentUser = currentUserService.getCurrentUser();
+
+        CreatorProfile creator = creatorProfileRepository.findByUser(currentUser)
+                .orElseThrow(() -> new CreatorProfileNotFoundException("Creator profile not found."));
+
+        // Find application
+        CampaignApplication application = applicationRepository.findById(applicationId)
+                .orElseThrow(() -> new ApplicationNotFoundException("Application not found."));
+
+        // Security check:
+        // Make sure this application belongs to the logged-in creator
+        if (!application.getCreator().getId().equals(creator.getId())) {
+            throw new UnauthorizedCampaignAccessException("You are not allowed to submit for this application.");
+        }
+
+        // Creator can submit only after being accepted
+        if (application.getStatus() != ApplicationStatus.ACCEPTED
+                && application.getStatus() != ApplicationStatus.SUBMITTED) {
+
+            throw new InvalidApplicationStateException(
+                    "You can submit only after your application has been accepted."
+            );
+        }
+
+        // Validate submission URL
+        if (request.getSubmissionUrl() == null || request.getSubmissionUrl().trim().isEmpty()) {
+            throw new IllegalArgumentException("Submission video URL cannot be empty.");
+        }
+
+        // Save submission
+        application.setSubmissionUrl(request.getSubmissionUrl().trim());
+        application.setSubmittedAt(LocalDateTime.now());
+
+        // Change application status
+        application.setStatus(ApplicationStatus.SUBMITTED);
+
+        applicationRepository.save(application);
+    }
 
 
 

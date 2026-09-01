@@ -1,9 +1,6 @@
 package in.pipeup.backend.auth.controller;
 
-import in.pipeup.backend.auth.Dto.LoginRequest;
-import in.pipeup.backend.auth.Dto.LoginResponse;
-import in.pipeup.backend.auth.Dto.RegisterRequest;
-import in.pipeup.backend.auth.Dto.RegisterResponse;
+import in.pipeup.backend.auth.Dto.*;
 import in.pipeup.backend.auth.service.AuthServiceImpl;
 import in.pipeup.backend.auth.service.IAuthService;
 import in.pipeup.backend.entity.User;
@@ -35,11 +32,27 @@ public class AuthController {
     }
 
 
-    @GetMapping("/demo")
-    public ResponseEntity<String> demo() {
-        return ResponseEntity.ok(
-                "Welcome to PipeUp! JWT Authentication is working successfully."
-        );
+    @PostMapping("/forgot-password")
+    public ResponseEntity<Void> forgotPassword(@RequestBody ForgotPasswordRequest request) {
+
+        authService.forgotPassword(request);
+        return ResponseEntity.ok().build();
     }
+
+    @PostMapping("/verify-otp")
+    public ResponseEntity<VerifyOtpResponse> verifyOtp(@RequestBody VerifyOtpRequest request) {
+
+        VerifyOtpResponse response = authService.verifyOtp(request);
+        return ResponseEntity.ok(response);
+    }
+
+
+    @PostMapping("/reset-password")
+    public ResponseEntity<Void> resetPassword(@RequestBody ResetPasswordRequest request) {
+
+        authService.resetPassword(request);
+        return ResponseEntity.ok().build();
+    }
+
 
 }

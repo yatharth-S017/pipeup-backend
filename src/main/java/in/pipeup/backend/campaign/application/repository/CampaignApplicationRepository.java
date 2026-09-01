@@ -7,6 +7,7 @@ import in.pipeup.backend.creator.entity.CreatorProfile;
 import org.springframework.data.jpa.repository.JpaRepository;
 
 import java.util.List;
+import java.util.Optional;
 
 public interface CampaignApplicationRepository extends JpaRepository<CampaignApplication, Long> {
 
@@ -21,4 +22,6 @@ public interface CampaignApplicationRepository extends JpaRepository<CampaignApp
 
     // Get applications of a campaign by status
     List<CampaignApplication> findByCampaignAndStatus(Campaign campaign, ApplicationStatus status);
+
+    Optional<CampaignApplication> findById(Long id);
 }

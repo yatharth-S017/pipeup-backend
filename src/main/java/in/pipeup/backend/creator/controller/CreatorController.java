@@ -2,12 +2,15 @@ package in.pipeup.backend.creator.controller;
 
 import in.pipeup.backend.creator.dto.request.CompleteCreatorOnboardingRequest;
 import in.pipeup.backend.creator.dto.request.UpdateCreatorProfileRequest;
+import in.pipeup.backend.creator.dto.response.CreatorDiscoveryResponse;
 import in.pipeup.backend.creator.dto.response.CreatorProfileResponse;
 import in.pipeup.backend.creator.service.ICreatorService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.List;
 
 @RestController
 @RequestMapping("/api/creator")
@@ -41,4 +44,6 @@ public class CreatorController {
 
         return ResponseEntity.ok(creatorService.updateProfile(request));
     }
+
+
 }

@@ -4,6 +4,7 @@ package in.pipeup.backend.campaign.application.controller;
 import in.pipeup.backend.campaign.application.dto.ApplicationResponse;
 import in.pipeup.backend.campaign.application.dto.ApplyCampaignRequest;
 import in.pipeup.backend.campaign.application.dto.MyApplicationResponse;
+import in.pipeup.backend.campaign.application.dto.SubmissionRequest;
 import in.pipeup.backend.campaign.application.service.IApplicationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -33,6 +34,17 @@ public class CreatorApplicationController {
 
         List<MyApplicationResponse> applications = applicationService.getMyApplications();
         return ResponseEntity.ok(applications);
+    }
+
+
+
+
+    @PostMapping("/api/creator/applications/{applicationId}/submit")
+    public ResponseEntity<String> submitApplication(@PathVariable Long applicationId, @Valid @RequestBody SubmissionRequest request) {
+
+        applicationService.submitApplication(applicationId, request);
+
+        return ResponseEntity.ok("Submission uploaded successfully.");
     }
 
     

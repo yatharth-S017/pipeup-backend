@@ -12,7 +12,7 @@ public enum ApplicationStatus {
     REJECTED,
 
     // Creator has submitted the content
-    CONTENT_SUBMITTED,
+    SUBMITTED,
 
     // Brand requested changes in the submitted content
     REVISION_REQUESTED,

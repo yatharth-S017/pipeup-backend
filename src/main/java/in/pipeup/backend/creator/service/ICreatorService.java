@@ -2,7 +2,10 @@ package in.pipeup.backend.creator.service;
 
 import in.pipeup.backend.creator.dto.request.CompleteCreatorOnboardingRequest;
 import in.pipeup.backend.creator.dto.request.UpdateCreatorProfileRequest;
+import in.pipeup.backend.creator.dto.response.CreatorDiscoveryResponse;
 import in.pipeup.backend.creator.dto.response.CreatorProfileResponse;
+
+import java.util.List;
 
 public interface ICreatorService {
 
@@ -11,4 +14,7 @@ public interface ICreatorService {
     CreatorProfileResponse getProfile();
 
     CreatorProfileResponse updateProfile(UpdateCreatorProfileRequest request);
+
+
+    List<CreatorDiscoveryResponse> getCreators();
 }

@@ -3,8 +3,12 @@ package in.pipeup.backend.creator.service;
 import in.pipeup.backend.common.security.CurrentUserService;
 import in.pipeup.backend.creator.dto.request.CompleteCreatorOnboardingRequest;
 import in.pipeup.backend.creator.dto.request.UpdateCreatorProfileRequest;
+import in.pipeup.backend.creator.dto.response.CreatorAnalyticsResponse;
+import in.pipeup.backend.creator.dto.response.CreatorDiscoveryResponse;
 import in.pipeup.backend.creator.dto.response.CreatorProfileResponse;
+import in.pipeup.backend.creator.entity.CreatorAnalytics;
 import in.pipeup.backend.creator.mapper.CreatorProfileMapper;
+import in.pipeup.backend.creator.repository.CreatorAnalyticsRepository;
 import in.pipeup.backend.creator.repository.CreatorProfileRepository;
 import in.pipeup.backend.creator.entity.CreatorProfile;
 import in.pipeup.backend.entity.User;
@@ -16,6 +20,7 @@ import org.springframework.stereotype.Service;
 import lombok.extern.slf4j.Slf4j;
 
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Service
 @RequiredArgsConstructor
@@ -28,6 +33,7 @@ public class CreatorServiceImpl implements ICreatorService {
     private final CurrentUserService currentUserService;
 
     private final ICreatorAnalyticsService creatorAnalyticsService;
+    private final CreatorAnalyticsRepository creatorAnalyticsRepository;
 
 
     @Override
@@ -89,4 +95,51 @@ public class CreatorServiceImpl implements ICreatorService {
 
         return creatorProfileMapper.toResponse(updatedProfile);
     }
+
+
+
+
+    @Override
+    public List<CreatorDiscoveryResponse> getCreators() {
+
+        List<CreatorProfile> creators = creatorProfileRepository.findAll();
+
+        return creators.stream()
+                .map(creator -> {
+
+                    CreatorAnalytics analytics = creatorAnalyticsRepository.findByCreatorProfile(creator).orElse(null);
+
+                    CreatorDiscoveryResponse.CreatorDiscoveryResponseBuilder response =
+                            CreatorDiscoveryResponse.builder()
+                                    .creatorId(creator.getId())
+                                    .displayName(creator.getDisplayName())
+                                    .profileImageUrl(creator.getProfileImageUrl())
+                                    .niches(creator.getNiches())
+                                    .city(creator.getCity())
+                                    .state(creator.getState())
+                                    .youtubeChannelUrl(creator.getYoutubeChannelUrl())
+                                    .instagramProfileUrl(creator.getInstagramProfileUrl());
+
+                    // Analytics may not exist for every creator
+                    if (analytics != null) {
+
+                        response
+                                .channelName(analytics.getChannelName())
+                                .channelLogo(analytics.getChannelLogo())
+                                .subscriberCount(analytics.getSubscriberCount())
+                                .totalViews(analytics.getTotalViews())
+                                .totalVideos(analytics.getTotalVideos())
+                                .averageViews(analytics.getAverageViews())
+                                .averageLikes(analytics.getAverageLikes())
+                                .averageComments(analytics.getAverageComments())
+                                .engagementRate(analytics.getEngagementRate());
+                    }
+
+                    return response.build();
+                })
+                .toList();
+    }
+
+
+
 }
