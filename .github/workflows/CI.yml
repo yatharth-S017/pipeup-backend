@@ -15,11 +15,9 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-      # 1. Checkout backend code
       - name: Checkout code
         uses: actions/checkout@v4
 
-      # 2. Set up Java 17
       - name: Set up Java 17
         uses: actions/setup-java@v4
         with:
@@ -27,8 +25,11 @@ jobs:
           distribution: 'temurin'
           cache: maven
 
-      # 3. Build Spring Boot application
       - name: Build application
         run: |
           chmod +x mvnw
           ./mvnw clean package -DskipTests
+
+      - name: Build Docker image
+        run: |
+          docker build -t nexup-backend:latest .
